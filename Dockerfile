@@ -8,9 +8,11 @@ COPY . /
 
 WORKDIR /
 
-RUN go mod tidy && go mod download
 
 
-RUN go run main.go
+RUN go build .
 
+
+
+CMD chmod +x addressApi && ./addressApi
 

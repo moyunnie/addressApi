@@ -2,6 +2,7 @@
 
 ## 1. 基本介绍
 
+docker build -t address .
 ### 1.1 功能
 
 > 项目内含2个功能
