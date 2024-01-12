@@ -11,7 +11,7 @@ type AddressReq struct {
 
 func main() {
 	r := gin.Default()
-	r.POST("address", func(c *gin.Context) {
+	r.POST("/address", func(c *gin.Context) {
 		var request AddressReq
 		err := c.ShouldBindJSON(&request)
 		if err != nil {
@@ -21,7 +21,7 @@ func main() {
 			})
 			return
 		}
-		parse := addr.Smart
+		parse := addr.Smart(request.Data)
 		c.JSON(200, gin.H{
 			"code": 200,
 			"data": parse,
