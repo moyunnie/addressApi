@@ -1,0 +1,7 @@
+version: "3"
+services:
+  address:
+    restart: always
+    image: .
+    ports:
+      - "8000:8000"

@@ -1,11 +1,11 @@
-package addr
+package main
 
 import (
 	"regexp"
 	"strconv"
 	"strings"
 
-	"github.com/pupuk/addr/areaMap"
+	"addressApi/areaMap"
 )
 
 type Address struct {
