@@ -1,7 +1,9 @@
 package main
 
 import (
+	"addressApi/areaMap"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type AddressReq struct {
@@ -20,7 +22,7 @@ func main() {
 			})
 			return
 		}
-		parse := Smart(request.Data)
+		parse := areaMap.Smart(request.Data)
 		c.JSON(200, gin.H{
 			"code": 200,
 			"data": parse,
@@ -28,5 +30,10 @@ func main() {
 		})
 		return
 	})
-	r.Run(":8000")
+	r.GET("ip", func(c *gin.Context) {
+		clientIP := c.ClientIP()
+		c.String(http.StatusOK, clientIP)
+		return
+	})
+	r.Run(":8001")
 }

@@ -1,11 +1,9 @@
-package main
+package areaMap
 
 import (
 	"regexp"
 	"strconv"
 	"strings"
-
-	"addressApi/areaMap"
 )
 
 type Address struct {
@@ -114,7 +112,7 @@ func Parse(address *Address) *Address {
 	// 处理区县级
 I:
 	for _, r := range rArr {
-		if r1, ok := areaMap.RegionByName[r]; ok && len(r1) == 1 {
+		if r1, ok := RegionByName[r]; ok && len(r1) == 1 {
 			address.Region = r1[0].Name
 			address.PostCode = strconv.Itoa(r1[0].Zipcode)
 			getAddressById(address, r1[0].Pid, city)
@@ -135,7 +133,7 @@ I:
 	// 处理市级
 	if address.City == "" {
 		for _, c := range cArr {
-			if r1, ok := areaMap.CityByName[c]; ok {
+			if r1, ok := CityByName[c]; ok {
 				address.City = r1[0].Name
 				address.PostCode = strconv.Itoa(r1[0].Zipcode)
 				getAddressById(address, r1[0].Pid, province)
@@ -148,7 +146,7 @@ I:
 	// 处理省级
 	if address.Province == "" {
 		for _, p := range pArr {
-			if r1, ok := areaMap.ProvinceByName[p]; ok {
+			if r1, ok := ProvinceByName[p]; ok {
 				address.Province = r1[0].Name
 				getAddressByPid(address, r1[0].Id, city, cArr)
 				getAddressByPid(address, r1[0].Id, region, rArr)
@@ -169,16 +167,16 @@ const (
 // 根据id获取地址信息
 func getAddressById(address *Address, id int, rank string) *Address {
 	if rank == province {
-		info := areaMap.ProvinceById[id]
+		info := ProvinceById[id]
 		address.Province = info.Name
 	}
 	if rank == city {
-		info := areaMap.CityById[id]
+		info := CityById[id]
 		address.City = info.Name
 		getAddressById(address, info.Pid, province)
 	}
 	if rank == region {
-		info := areaMap.RegionById[id]
+		info := RegionById[id]
 		address.Region = info.Name
 		getAddressById(address, info.Pid, city)
 	}
@@ -189,7 +187,7 @@ func getAddressById(address *Address, id int, rank string) *Address {
 func getAddressByPid(address *Address, pid int, rank string, arr []string) *Address {
 	if rank == city && address.City == "" {
 		for _, addr := range arr {
-			for _, info := range areaMap.CityByPid[pid] {
+			for _, info := range CityByPid[pid] {
 				if strings.Contains(info.Name, addr) {
 					address.City = info.Name
 					address.PostCode = strconv.Itoa(info.Zipcode)
@@ -200,7 +198,7 @@ func getAddressByPid(address *Address, pid int, rank string, arr []string) *Addr
 	}
 	if rank == region && address.Region == "" {
 		for _, addr := range arr {
-			for _, info := range areaMap.RegionByPid[pid] {
+			for _, info := range RegionByPid[pid] {
 				if strings.Contains(info.Name, addr) {
 					address.Region = info.Name
 					address.PostCode = strconv.Itoa(info.Zipcode)
