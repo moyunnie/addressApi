@@ -1,6 +1,10 @@
 version: "3"
 services:
   address:
+    hostname: address
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     image: address
     ports:
